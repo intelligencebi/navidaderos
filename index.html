@@ -803,13 +803,32 @@
     const prizeSound = document.getElementById('prizeSound');
     const soundControl = document.getElementById('soundControl');
 
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        document.getElementById('preloader').classList.add('hidden');
-        startBackgroundMusic();
-      }, 2100);
-    });
-
+    let isMusicPlaying = false;
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    const prizeSound = document.getElementById('prizeSound');
+    const soundControl = document.getElementById('soundControl');
+    
+    backgroundMusic.volume = 0.7; // opcional
+    
+    function toggleBackgroundMusic() {
+      if (isMusicPlaying) {
+        backgroundMusic.pause();
+        soundControl.textContent = '🔇';
+        isMusicPlaying = false;
+      } else {
+        backgroundMusic.currentTime = 0;
+        backgroundMusic.play()
+          .then(() => {
+            soundControl.textContent = '🔊';
+            isMusicPlaying = true;
+          })
+          .catch(err => {
+            console.log('Error al reproducir música:', err);
+          });
+      }
+    }
+    
+    soundControl.addEventListener('click', toggleBackgroundMusic);
     function startBackgroundMusic() {
       backgroundMusic.play().then(() => {
         isMusicPlaying = true;
